@@ -29,5 +29,6 @@ func TestInvalidHostAddress(t *testing.T) {
 		}
 	}()
 
+	_ = os.Setenv("HTTP_ADDR", "")
 	NewServer()
 }
