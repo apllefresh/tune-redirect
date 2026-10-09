@@ -1,7 +1,14 @@
 package main
 
-import "fmt"
+import (
+	"github.com/apllefresh/tune-redirect/internal/api"
+)
 
 func main() {
-	fmt.Println("Hello World")
+	var container = api.NewContainer()
+
+	err := container.Start()
+	if err != nil {
+		panic(err)
+	}
 }
