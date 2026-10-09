@@ -16,11 +16,3 @@ func (h *HealthCheckHandler) GetHandler() http.HandlerFunc {
 		w.Write([]byte("OK"))
 	}
 }
-
-func (h *HealthCheckHandler) GetRoute() string {
-	return "/healthz"
-}
-
-func (h *HealthCheckHandler) GetMethod() string {
-	return http.MethodGet
-}

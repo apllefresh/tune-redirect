@@ -1,13 +1,21 @@
 package main
 
 import (
+	"os"
+
 	"github.com/apllefresh/tune-redirect/internal/api"
 )
 
 func main() {
-	var container = api.NewContainer()
+	httpAddress := os.Getenv("HTTP_ADDR")
+	if httpAddress == "" {
+		panic("HTTP_ADDR environment variable not set")
+	}
 
-	err := container.Start()
+	server := api.NewServer(httpAddress)
+	server.RegisterRoutes()
+
+	err := server.Start()
 	if err != nil {
 		panic(err)
 	}

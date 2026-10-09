@@ -1,9 +1,9 @@
 package api
 
 import (
-	"errors"
 	"net/http"
 
+	"github.com/apllefresh/tune-redirect/internal/handler"
 	"github.com/go-chi/chi/v5"
 )
 
@@ -26,19 +26,11 @@ func NewServer(httpAddress string) *Server {
 	}
 }
 
-type IHandler interface {
-	GetHandler() http.HandlerFunc
-	GetRoute() string
-	GetMethod() string
+func (s *Server) RegisterRoutes() {
+
+	s.router.Get("/healthz", handler.NewHealthCheckHandler().GetHandler())
 }
 
-func (s *Server) AddRoute(handler IHandler) error {
-	switch handler.GetMethod() {
-	case http.MethodGet:
-		s.router.Get(handler.GetRoute(), handler.GetHandler())
-	default:
-		return errors.New("invalid method")
-	}
-
-	return nil
+func (s *Server) Start() error {
+	return s.httpServer.ListenAndServe()
 }
