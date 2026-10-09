@@ -3,11 +3,13 @@ package http
 import (
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"testing"
 )
 
 func TestHealth(t *testing.T) {
-	s := NewServer("127.0.0.1:0")
+	_ = os.Setenv("HTTP_ADDR", "127.0.0.1:0")
+	s := NewServer()
 	s.RegisterRoutes()
 
 	req := httptest.NewRequest("GET", "/healthz", nil)
@@ -27,5 +29,5 @@ func TestInvalidHostAddress(t *testing.T) {
 		}
 	}()
 
-	NewServer("")
+	NewServer()
 }

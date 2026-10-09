@@ -2,6 +2,7 @@ package http
 
 import (
 	"net/http"
+	"os"
 
 	"github.com/apllefresh/tune-redirect/internal/handler"
 	"github.com/go-chi/chi/v5"
@@ -12,7 +13,8 @@ type Server struct {
 	router     *chi.Mux
 }
 
-func NewServer(httpAddress string) *Server {
+func NewServer() *Server {
+	httpAddress := os.Getenv("HTTP_ADDR")
 	if httpAddress == "" {
 		panic("HTTP_ADDR is required")
 	}

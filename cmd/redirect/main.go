@@ -1,15 +1,11 @@
 package main
 
 import (
-	"os"
-
 	"github.com/apllefresh/tune-redirect/internal/http"
 )
 
 func main() {
-	httpAddress := os.Getenv("HTTP_ADDR")
-
-	server := http.NewServer(httpAddress)
+	server := http.NewServer()
 	server.RegisterRoutes()
 
 	err := server.Start()
