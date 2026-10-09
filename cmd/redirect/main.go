@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"github.com/apllefresh/tune-redirect/internal/api"
+	"github.com/apllefresh/tune-redirect/internal/http"
 )
 
 func main() {
@@ -12,7 +12,7 @@ func main() {
 		panic("HTTP_ADDR environment variable not set")
 	}
 
-	server := api.NewServer(httpAddress)
+	server := http.NewServer(httpAddress)
 	server.RegisterRoutes()
 
 	err := server.Start()
