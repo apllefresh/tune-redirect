@@ -13,6 +13,10 @@ type Server struct {
 }
 
 func NewServer(httpAddress string) *Server {
+	if httpAddress == "" {
+		panic("HTTP_ADDR is required")
+	}
+
 	router := chi.NewRouter()
 
 	s := &http.Server{

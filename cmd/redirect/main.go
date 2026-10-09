@@ -8,9 +8,6 @@ import (
 
 func main() {
 	httpAddress := os.Getenv("HTTP_ADDR")
-	if httpAddress == "" {
-		panic("HTTP_ADDR environment variable not set")
-	}
 
 	server := http.NewServer(httpAddress)
 	server.RegisterRoutes()

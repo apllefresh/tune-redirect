@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func Test(t *testing.T) {
+func TestHealth(t *testing.T) {
 	s := NewServer("127.0.0.1:0")
 	s.RegisterRoutes()
 
@@ -18,4 +18,14 @@ func Test(t *testing.T) {
 	if rec.Code != http.StatusOK {
 		t.Fatalf(`expected 200 OK, got %d`, rec.Code)
 	}
+}
+
+func TestInvalidHostAddress(t *testing.T) {
+	defer func() {
+		if recover() == nil {
+			t.Errorf("expected panic")
+		}
+	}()
+
+	NewServer("")
 }
