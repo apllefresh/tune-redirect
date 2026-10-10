@@ -3,8 +3,11 @@ package http
 import (
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"os"
 	"testing"
+
+	"github.com/google/uuid"
 )
 
 func TestHealth(t *testing.T) {
@@ -77,8 +80,17 @@ func TestTableClickOk(t *testing.T) {
 		t.Fatalf(`got %d`, rec.Code)
 	}
 
-	if rec.Header().Get("Location") != "https://google.com" {
-		t.Fatalf(`expected https://google.com, got %q`, rec.Header().Get("Location"))
+	loc, err := url.Parse(rec.Header().Get("Location"))
+	if err != nil {
+		t.Fatal(err)
 	}
 
+	if loc.Scheme != "https" || loc.Host != "google.com" || loc.Path != "" {
+		t.Fatalf(`landing changed`)
+	}
+
+	tid := loc.Query().Get("tid")
+	if _, err := uuid.Parse(tid); err != nil {
+		t.Fatalf("tid: %v", err)
+	}
 }
