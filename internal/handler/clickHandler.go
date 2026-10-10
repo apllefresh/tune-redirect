@@ -1,9 +1,12 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
+	"net/url"
 
 	"github.com/apllefresh/tune-redirect/internal/models"
+	"github.com/google/uuid"
 )
 
 type ClickHandler struct {
@@ -49,7 +52,27 @@ func (h *ClickHandler) HandleClick(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusNotFound)
 		return
 	}
+	location, err := AddTid(offer)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 
-	w.Header().Set("Location", offer.Location)
+	w.Header().Set("Location", location)
 	w.WriteHeader(http.StatusFound)
+}
+
+func AddTid(offer models.Offer) (string, error) {
+	tid := uuid.New()
+
+	parsed, err := url.Parse(offer.Location)
+	if err != nil {
+		return "", fmt.Errorf("invalid offer location {%s}", offer.Id)
+	}
+
+	q := parsed.Query()
+	q.Set("tid", tid.String())
+	parsed.RawQuery = q.Encode()
+
+	return parsed.String(), nil
 }
