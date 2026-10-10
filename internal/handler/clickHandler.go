@@ -55,6 +55,7 @@ func (h *ClickHandler) HandleClick(w http.ResponseWriter, r *http.Request) {
 	location, err := AddTid(offer)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 
 	w.Header().Set("Location", location)

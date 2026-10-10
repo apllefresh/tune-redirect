@@ -93,4 +93,13 @@ func TestTableClickOk(t *testing.T) {
 	if _, err := uuid.Parse(tid); err != nil {
 		t.Fatalf("tid: %v", err)
 	}
+
+	s.router.ServeHTTP(rec, req)
+
+	loc, _ = url.Parse(rec.Header().Get("Location"))
+	tid2 := loc.Query().Get("tid")
+
+	if tid == tid2 {
+		t.Fatalf(`tid2 is the same as tid`)
+	}
 }
