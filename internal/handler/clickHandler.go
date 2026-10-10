@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	"github.com/apllefresh/tune-redirect/internal/models"
-	"github.com/go-chi/chi/v5"
 )
 
 type ClickHandler struct {
@@ -31,24 +30,26 @@ func NewClickHandler() *ClickHandler {
 
 func (h *ClickHandler) HandleClick(w http.ResponseWriter, r *http.Request) {
 
-	offerId := chi.URLParam(r, "offer_id")
-	partnerId := chi.URLParam(r, "partner_id")
+	offerId := r.URL.Query().Get("offer_id")
+	partnerId := r.URL.Query().Get("partner_id")
 
 	if offerId == "" || partnerId == "" {
 		w.WriteHeader(http.StatusNotFound)
+		return
 	}
 
 	partnerOffers, ok := h.Data[partnerId]
 	if !ok {
 		w.WriteHeader(http.StatusNotFound)
+		return
 	}
 
 	offer, ok := partnerOffers.Offers[offerId]
 	if !ok {
 		w.WriteHeader(http.StatusNotFound)
+		return
 	}
 
 	w.WriteHeader(http.StatusFound)
-	_, _ = w.Write([]byte(offer.Location))
-
+	w.Header().Set("Location", offer.Location)
 }

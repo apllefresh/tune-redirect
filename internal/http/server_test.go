@@ -33,7 +33,7 @@ func TestInvalidHostAddress(t *testing.T) {
 	NewServer()
 }
 
-func TableTestClick(t *testing.T) {
+func TestTableClick(t *testing.T) {
 	cases := []struct {
 		name string
 		url  string
@@ -42,6 +42,7 @@ func TableTestClick(t *testing.T) {
 		{name: "no offer", url: "/click?partner_id=1"},
 		{name: "no partner", url: "/click?offer_id=1"},
 		{name: "unknown offer", url: "/click?partner_id=1&offer_id=2"},
+		{name: "unknown aff", url: "/click?partner_id=2&offer_id=1"},
 	}
 
 	for _, tc := range cases {
@@ -49,6 +50,7 @@ func TableTestClick(t *testing.T) {
 			req := httptest.NewRequest("GET", tc.url, nil)
 			rec := httptest.NewRecorder()
 
+			_ = os.Setenv("HTTP_ADDR", "127.0.0.1:0")
 			s := NewServer()
 			s.RegisterRoutes()
 
