@@ -9,9 +9,7 @@ func NewHealthCheckHandler() *HealthCheckHandler {
 	return &HealthCheckHandler{}
 }
 
-func (h *HealthCheckHandler) GetHandler() http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("OK"))
-	}
+func (h *HealthCheckHandler) Handle(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("OK"))
 }

@@ -33,8 +33,11 @@ func NewServer() *Server {
 }
 
 func (s *Server) RegisterRoutes() {
+	healthCheckHandler := handler.NewHealthCheckHandler()
+	clickHandler := handler.NewClickHandler()
 
-	s.router.Get("/healthz", handler.NewHealthCheckHandler().GetHandler())
+	s.router.Get("/healthz", healthCheckHandler.Handle)
+	s.router.Get("/click?offer={offer_id}&aff={partner_id}", clickHandler.HandleClick)
 }
 
 func (s *Server) Start() error {
