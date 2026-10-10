@@ -30,8 +30,8 @@ func NewClickHandler() *ClickHandler {
 
 func (h *ClickHandler) HandleClick(w http.ResponseWriter, r *http.Request) {
 
-	offerId := r.URL.Query().Get("offer_id")
-	partnerId := r.URL.Query().Get("partner_id")
+	offerId := r.URL.Query().Get("offer")
+	partnerId := r.URL.Query().Get("aff")
 
 	if offerId == "" || partnerId == "" {
 		w.WriteHeader(http.StatusNotFound)
@@ -50,6 +50,6 @@ func (h *ClickHandler) HandleClick(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.WriteHeader(http.StatusFound)
 	w.Header().Set("Location", offer.Location)
+	w.WriteHeader(http.StatusFound)
 }

@@ -39,10 +39,10 @@ func TestTableClick(t *testing.T) {
 		url  string
 	}{
 		{name: "nothing", url: "/click"},
-		{name: "no offer", url: "/click?partner_id=1"},
-		{name: "no partner", url: "/click?offer_id=1"},
-		{name: "unknown offer", url: "/click?partner_id=1&offer_id=2"},
-		{name: "unknown aff", url: "/click?partner_id=2&offer_id=1"},
+		{name: "no offer", url: "/click?aff=1"},
+		{name: "no partner", url: "/click?offer=1"},
+		{name: "unknown offer", url: "/click?aff=1&offer=2"},
+		{name: "unknown aff", url: "/click?aff=2&offer=1"},
 	}
 
 	for _, tc := range cases {
@@ -61,4 +61,24 @@ func TestTableClick(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestTableClickOk(t *testing.T) {
+	req := httptest.NewRequest("GET", "/click?aff=1&offer=1", nil)
+	rec := httptest.NewRecorder()
+
+	_ = os.Setenv("HTTP_ADDR", "127.0.0.1:0")
+	s := NewServer()
+	s.RegisterRoutes()
+
+	s.router.ServeHTTP(rec, req)
+
+	if rec.Code != http.StatusFound {
+		t.Fatalf(`got %d`, rec.Code)
+	}
+
+	if rec.Header().Get("Location") != "https://google.com" {
+		t.Fatalf(`expected https://google.com, got %q`, rec.Header().Get("Location"))
+	}
+
 }
